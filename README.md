@@ -19,7 +19,7 @@ This project is licensed under the GUN General Public License. See [LICENSE](LIC
 
 ## Citation
 
-This code is associate to a scientific publication. See [CITATION](CITATION)
+This code is associate to a scientific publication. See [CITATION](CITATION).
 
 ## Data
 
