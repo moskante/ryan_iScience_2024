@@ -15,7 +15,7 @@ To run the scripts, R version 4+ is needed.
 
 ## License
 
-This project is licensed under the GUN General Public License. See [LICENSE](LICENSE.md) file for details. 
+This project is licensed under the GUN General Public License. See [LICENSE](LICENSE) file for details. 
 
 ## Citation
 
