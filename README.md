@@ -7,6 +7,7 @@ This repository contains the code for analyzing data from the paper by Ryan et a
 - [Usage](#usage)
 - [License](#license)
 - [Citation](#citation)
+- [Data](#data)
 
 ## Usage
 
