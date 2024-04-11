@@ -25,7 +25,7 @@ lmer_axis <- function(arg_axis, arg_vision, arg_formula, arg_data, plot = FALSE,
 }
 
 # nonlinear model analysis of motion angle
-fit_nls_model <- function(arg_id, do_plot = FALSE){
+fit_nls_model <- function(arg_id){
   
   tmp <- final_position %>%
     filter(id == arg_id)%>%
@@ -38,31 +38,11 @@ fit_nls_model <- function(arg_id, do_plot = FALSE){
   tmp <- tmp %>%
     mutate(cot_theta_pred = predict(nls_model_fit))
   
-  if(do_plot == TRUE){
-    
-    fig <- ggplot(data = tmp) +
-      geom_point(mapping = aes(y = cot_theta, x = cot_theta_des)) +
-      geom_smooth(mapping = aes(y = cot_theta_pred, x = cot_theta_des), method = "lm", color = "red") +
-      facet_grid(gain_y ~ gain_x)+
-      #scale_x_continuous(breaks = c(-1.0, 0.0, 1.0)) +
-      #scale_y_continuous(breaks = c(-1.0, 0.0, 1.0)) +
-      labs(x = expression(paste(plain(cot)  * ( bar(theta) ) ) ), 
-           y = expression(paste(plain(cot)  *  (theta))) )
-    
-    
-    
-    file_id <- str_c(arg_id, "_angle_figure.png")
-    
-    ggsave(filename = file_id, plot = fig, path = "figures/figures_angle",
-           width = width_small, height = 70 * mm2inch)
-    
-    #ggsave(filename = file_id, plot = fig, path = "figures/figures_angle",
-    #width = width_medium, height = 70 * mm2inch)
-  }
   
   return(nls_model_fit)
 }
 
+# make barplots with random-effect slopes
 barplot_lmm_vel_pos <- function(lmm_fit, model_name, velocity = TRUE ){
   
   cluster.median = t(apply(X = lme4::ranef(lmm_fit)[[1]], MARGIN = 1, FUN = function(x){x + lme4::fixef(lmm_fit)}))
