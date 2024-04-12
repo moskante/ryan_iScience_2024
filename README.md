@@ -23,4 +23,5 @@ This code is associate to a scientific publication. See [CITATION](CITATION).
 
 ## Data
 
-ADD DATA
+Data available on Zenodo
+DOI: 10.5281/zenodo.10964672
