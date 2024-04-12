@@ -4,9 +4,9 @@ force_threshold <- c(x = 0.25, y = 0.21)
 axis <- c("x", "y")
 
 final_position_subset_force <- final_position_zscore %>%
-  dplyr::filter(visual_ctrl == 0, 
-                abs(tactile_speed_force_peak) < 400
-  ) %>% # no visual control and remove faster trials
+  dplyr::filter(visual_ctrl == 0, # exp1 only
+                abs(tactile_speed_force_peak) < 400 # remove trials faster than 400 mm/s (74 trials out of 4590)
+  )%>%
   mutate(
     gain_fct = as.factor(gain),
     force_shear_abs = abs(force_peak)
@@ -16,8 +16,6 @@ final_position_force_threshold <- list(x = NA, y = NA)
 final_position_summary <- list(x = NA, y = NA)
 scatterplot_velocity_by_shear <- list( x = NA, y = NA)
 summary_velocity_by_shear <- list( x = NA, y = NA)
-scatterplot_force <- list(x = NA, y = NA)
-density_force <- list(x = NA, y = NA)
 histogram_force <- list(x = NA, y = NA)
 histogram_force_all <- list(x = NA, y = NA)
 
@@ -166,32 +164,17 @@ lmm_pos_summary_by_shear_high <- map(lmm_pos_fit_by_shear_high, .f = summary, .i
 # Force - figures -------------
 
 for(i in axis){
-  
-  scatterplot_force[[i]] <-
+## Figure 7 -------
+  histogram_force_all[[i]] <- 
     ggplot(data = dplyr::filter(final_position_subset_force, axis == i),
-           mapping = aes(y = force_shear_abs, x = abs(tactile_speed_force_peak),
-                         color =  gain_fct )) + #   force_peak_z 
-    geom_point(size = 1) +
-    # geom_smooth(method = "lm") +
-    geom_hline(yintercept = force_threshold [[i]])+
-    coord_cartesian(xlim = c(0,400), ylim = c(0,1))+
-    #facet_wrap( ~ id_name ) +
-    facet_wrap( ~ gain_fct ) +
-    scale_x_continuous(breaks = seq(0, 300, by = 150))+
-    labs(y = "|Force Peak| [N]", x = "Tactile Speed [mm/s]") +
-    theme(legend.position = "null", text = element_text(size = 12))
-  
-  density_force[[i]] <- 
-    ggplot(data = dplyr::filter(final_position_subset_force, 
-                                axis == i, force_shear_abs < force_threshold [[i]]),
-           mapping = aes(x = force_shear_abs, color = gain_fct)) + # , color = as.factor(id)
-    geom_density(linewidth = 1)  +
+           mapping = aes(x = force_shear_abs, after_stat(density), color = gain_fct)) + # , color = as.factor(id)
+    geom_freqpoly()+
     labs(title = "Force Peak", x = "Force [N]", y = "Density")  +
     theme(text = element_text(size = 10),
           plot.title = element_text(hjust = 0.5),
           legend.position = "none")
   
-  # Supplementary Figure 1
+## Supplementary Figure 1 ----
   histogram_force[[i]] <- 
     ggplot(data = dplyr::filter(final_position_subset_force, 
                                 axis == i, force_shear_abs < force_threshold [[i]]),
@@ -202,17 +185,8 @@ for(i in axis){
           plot.title = element_text(hjust = 0.5),
           legend.position = "none")
   
-  # Figure 7
-  histogram_force_all[[i]] <- 
-    ggplot(data = dplyr::filter(final_position_subset_force, axis == i),
-           mapping = aes(x = force_shear_abs, after_stat(density), color = gain_fct)) + # , color = as.factor(id)
-    geom_freqpoly()+
-    labs(title = "Force Peak", x = "Force [N]", y = "Density")  +
-    theme(text = element_text(size = 10),
-          plot.title = element_text(hjust = 0.5),
-          legend.position = "none")
-  
-  # Supplementary figure 2
+
+## Supplementary figure 2 -------
   scatterplot_velocity_by_shear[[i]] <- 
     ggplot(data = summary_velocity_by_shear[[i]],
            mapping = aes(x = gain, y = thimble_vel_mean_zscore, color = force_level )) +
@@ -229,11 +203,28 @@ for(i in axis){
   
 }
 
-lmm_pos_barplot_by_shear_ranef <- map2(.x = lmm_pos_fit_by_shear_ranef,
-                                       .y = c("exp1_x", "exp1_y"),
-                                       .f = barplot_lmm_vel_pos,
-                                       velocity = FALSE)
-
+## Force peak density, Supplementary figures 15 and 16 ------
+force_density <- list()
+for(i in 0:1){
+  
+  visual_ctr_i <- i
+  final_position_pl <- final_position %>%
+    dplyr::filter(visual_ctrl == visual_ctr_i) %>%
+    pivot_longer(cols = c("force_peak_x","force_peak_y","force_peak_z"),
+                 names_to = "force_peak_axis", names_prefix = "force_peak_",
+                 values_to = "force_peak")
+  
+  force_density[[i+1]] <- ggplot(data = final_position_pl,
+                          mapping = aes(x = force_peak, fill = force_peak_axis)) + # , color = as.factor(id)
+    geom_density(linewidth = 1)  +
+    coord_cartesian(xlim = c(-2.5,2.5)) +
+    facet_wrap( ~ force_peak_axis) +
+    labs(title = paste("Force Peak, visual control = ", visual_ctr_i), x = "Force [N]", y = "Density")  +
+    theme(text = element_text(size = 10),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = "none")
+  
+}
 ## Barplots - models ------
 
 ### Velocity, low force subset -----

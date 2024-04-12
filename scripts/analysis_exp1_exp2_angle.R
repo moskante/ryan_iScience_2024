@@ -1,5 +1,5 @@
 # Motion angle analysis ------------------------------------------------
-load("participants_info.RData")
+load("participants_info_exp1_exp2.RData")
 source("scripts/preprocessing_exp1_exp2.R", echo = FALSE)
 
 nls_formula <- as.formula(cot_theta ~ cot_theta_des * ((1 - w_c * gain_y)/(1 - w_c * gain_x))) 

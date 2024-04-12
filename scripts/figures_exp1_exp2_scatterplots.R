@@ -3,10 +3,10 @@ source("scripts/preprocessing_exp1_exp2.R", echo = FALSE)
 ## Scatterplot - velocity (Fig. 4c) -------------------------------
 # this prepares data for the scatterplot in figure 4c of manuscript
 
-id_for_scatterplot <- c("20210111cory", "20210224cory")
+id_for_scatterplot <- "20210111cory"
 
 summary_participant_velocity <- final_position_zscore %>%
-  dplyr::filter(id %in% id_for_scatterplot ) %>% # same as: id == "20210111cory" | id ==  "20210224cory"
+  dplyr::filter(id %in% id_for_scatterplot ) %>% 
   dplyr::filter(trial_time > 1, thimble_velocity_peak_zscore < 3, thimble_velocity_peak_zscore > -3) %>% 
   group_by(id, axis, target_fct, gain) %>%
   summarize(
@@ -16,11 +16,8 @@ summary_participant_velocity <- final_position_zscore %>%
   ) %>%
   ungroup()
 
-scatterplot_velocity <- list() # scatterplot of velocity for exp 2 ( scatterplot_velocity[[2]]) not shown in manuscript
-for(i in 1:2){
-  
-  scatterplot_velocity[[i]] <-
-    ggplot(data = dplyr::filter(summary_participant_velocity, id == id_for_scatterplot[[i]]),
+scatterplot_velocity <-
+    ggplot(data = dplyr::filter(summary_participant_velocity, id == id_for_scatterplot),
            mapping = aes(x = gain, y = thimble_vel_mean_zscore )) +
     geom_errorbar(aes(ymin = thimble_vel_mean_zscore - thimble_vel_sd_zscore,
                       ymax = thimble_vel_mean_zscore + thimble_vel_sd_zscore),
@@ -32,15 +29,14 @@ for(i in 1:2){
     scale_x_continuous(breaks = c(-0.7,0,0.7), limits = c(-0.8,0.8)) +
     labs(x = "Gain", y = "Velocity Peak [z-score]")
   
-}
 
-names(scatterplot_velocity) <- c("exp1", "exp2") 
+
 
 # Scatterplot - position (Fig. 5b, 8b)-------
 
 # summary for three representative participants
 summary_participant_position <- final_position_zscore %>%
-  dplyr::filter(id == "20210111cory" | id =="20210505maco" | id == "20210224gica" ) %>% 
+  dplyr::filter(id == "20210111cory" | id == "20210224gica" ) %>% 
   dplyr::filter(trial_time > 1 ) %>%
   group_by(id, axis, target, gain) %>%
   summarize(
