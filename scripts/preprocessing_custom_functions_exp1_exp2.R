@@ -24,24 +24,6 @@ lmer_axis <- function(arg_axis, arg_vision, arg_formula, arg_data, plot = FALSE,
   return(lmm_fit)
 }
 
-# nonlinear model analysis of motion angle
-fit_nls_model <- function(arg_id){
-  
-  tmp <- final_position %>%
-    filter(id == arg_id)%>%
-    filter(cot_theta < 40 & cot_theta > -5) #This filters the outliers 
-  
-  nls_model_fit <- nls(formula = nls_formula, start = list(w_c = 0.3), algorithm = "port", 
-                       lower = 0, upper = 1, data = tmp )
-  
-  # estimate of w_c and prediction (plot)
-  tmp <- tmp %>%
-    mutate(cot_theta_pred = predict(nls_model_fit))
-  
-  
-  return(nls_model_fit)
-}
-
 # make barplots with random-effect slopes
 barplot_lmm_vel_pos <- function(lmm_fit, model_name, velocity = TRUE ){
   

@@ -1,6 +1,20 @@
 # Motion angle analysis ------------------------------------------------
+library(tidyverse)
 load("participants_info_exp1_exp2.RData")
-source("scripts/preprocessing_exp1_exp2.R", echo = FALSE)
+load("final_position_exp1_exp2.RData")
+
+# nonlinear model analysis of motion angle
+fit_nls_model <- function(arg_id){
+  
+  tmp <- final_position %>%
+    filter(id == arg_id)%>%
+    filter(cot_theta < 40 & cot_theta > -5) #This filters the outliers 
+  
+  nls_model_fit <- nls(formula = nls_formula, start = list(w_c = 0.3), algorithm = "port", 
+                       lower = 0, upper = 1, data = tmp )
+  
+  return(nls_model_fit)
+}
 
 nls_formula <- as.formula(cot_theta ~ cot_theta_des * ((1 - w_c * gain_y)/(1 - w_c * gain_x))) 
 
@@ -14,10 +28,6 @@ estim_w_c <- map_dfr(.x = nls_model_fit, coefficients, .id = "id") %>%
   inner_join(., y = participants_info_experiment) %>%
   dplyr::select(id, id_name, age, gender, hand_dominance, visual_control, w_c) %>%
   arrange(visual_control)
-
-boxplot_weight <- ggplot(estim_w_c, mapping = aes(y = w_c, x = as.factor(visual_control)))+
-  geom_boxplot()+
-  labs(x = "Visual Feedback", y = "Weight Touch")
 
 t.test(w_c ~ visual_control, data = estim_w_c, paired = F)
 

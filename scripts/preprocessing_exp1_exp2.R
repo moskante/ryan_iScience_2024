@@ -5,17 +5,9 @@ library(lme4)
 
 # load data and custom functions -----------
 load("final_position_exp1_exp2.RData")
-source("scripts/preprocessing_custom_functions.R", echo=FALSE)
+source("scripts/preprocessing_custom_functions_exp1_exp2.R", echo=FALSE)
 
 # Data pre-processing -------------------------------------------------------
-
-# cotangent of angle theta
-final_position <- final_position %>%
-  mutate(
-    cot_theta_des = target_pos_x/target_pos_y,
-    cot_theta = thimble_pos_x/thimble_pos_y
-  ) 
-
 # transform to long tibble across all _y and _x
 final_position_axis <- c("x", "y") %>%
   map(.f = pivot_by_axis) %>%

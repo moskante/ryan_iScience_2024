@@ -1,7 +1,5 @@
 library(tidyverse)
-library(ggpubr)
 load("trajectories_exp1_exp2.RData")
-
 
 # Velocity profile exp. 1 (Figure 4 a-b) ----
 id_for_velocity <- "20210111cory"
@@ -14,11 +12,10 @@ trajectories_velocity <- trajectories %>%
   mutate(target_fct = factor(target)) %>%
   mutate(target_fct = recode_factor(target_fct, `45` = "left", `0` = "center",`-45` = "right"))
 
-# X axis
+# X axis, 4 a
 speed_by_gain_x <-
   ggplot(data = dplyr::filter(trajectories_velocity, thimble_speed_axis == "x"), 
          mapping = aes(x = trial_time, y = thimble_speed, color = as.factor(gain_x))) +
-  # geom_point(size = 0.1, color = "grey", alpha = 0.5)+
   geom_line(mapping = aes(group = trial_index), linewidth = 0.2, color = "grey") +
   geom_smooth() +
   facet_grid(target_fct ~ gain_x) +
@@ -26,18 +23,16 @@ speed_by_gain_x <-
   labs(x = "Time [s]", y = "Velocity x [mm/s]") +
   theme(text = element_text(size = 10), plot.title = element_text( hjust = 0.5), legend.position = "none")
 
-# Y axis
+# Y axis, 4 b
 speed_by_gain_y <-
   ggplot(data = dplyr::filter(trajectories_velocity, thimble_speed_axis == "y"), 
          mapping = aes(x = trial_time, y = thimble_speed, color = as.factor(gain_y))) +
-  # geom_point(size = 0.1, color = "grey", alpha = 0.5)+
   geom_line(mapping = aes(group = trial_index), linewidth = 0.2, color = "grey") +
   geom_smooth() +
   facet_grid(target_fct ~ gain_y) +
   coord_cartesian(ylim = c(-10, 150), xlim = c(0,2)) +
   labs(x = "Time [s]", y = "Velocity y [mm/s]") +
   theme(text = element_text(size = 10), plot.title = element_text( hjust = 0.5), legend.position = "none")
-
 
 
 # Force profile exp.1 (fig. 6) -----
@@ -60,10 +55,10 @@ smoothed_trajectory_y <- trajectories_force %>%
 
 shear_by_gain <- list(x = NA, y = NA)
 
+# X axis, Fig. 6 a
 shear_by_gain[["x"]] <-
   ggplot(data = dplyr::filter(smoothed_trajectory_x, force_axis == "x"), 
          mapping = aes(x = trial_time, y = smoothed_value, color = as.factor(gain_x))) +
-  # geom_point(size = 0.1, color = "grey", alpha = 0.5)+
   geom_line(mapping = aes(group = id), linewidth = 0.2, color = "grey") +
   geom_smooth() +
   facet_grid(target_fct ~ gain_x) +
@@ -71,11 +66,10 @@ shear_by_gain[["x"]] <-
   labs(x = "Time [s]", y = "Force x [N]") +
   theme(text = element_text(size = 10), plot.title = element_text( hjust = 0.5), legend.position = "none")
 
-# Y axis
+# Y axis, Fig. 6 b
 shear_by_gain[["y"]]  <-
   ggplot(data = dplyr::filter(smoothed_trajectory_y, force_axis == "y"), 
          mapping = aes(x = trial_time, y = smoothed_value, color = as.factor(gain_y))) +
-  # geom_point(size = 0.1, color = "grey", alpha = 0.5)+
   geom_line(mapping = aes(group = id), linewidth = 0.2, color = "grey") +
   geom_smooth() +
   facet_grid(target_fct ~ gain_y) +
@@ -83,11 +77,8 @@ shear_by_gain[["y"]]  <-
   labs(x = "Time [s]", y = "Force y [N]") +
   theme(text = element_text(size = 10), plot.title = element_text( hjust = 0.5), legend.position = "none")
 
-# Figure 6
-figure_shear_by_gain <- ggarrange(shear_by_gain[["x"]], shear_by_gain[["y"]], labels = c("A", "B"), ncol = 1, nrow = 2)
 
 # Position profile (trajectories), exp. 1 (Fig. 5a) and exp.2 (Fig. 8a) ------
-
 load("final_position_exp1_exp2.RData")
 
 id_for_trajectories <- c("20201215efsc", "20210505maco")
@@ -164,11 +155,7 @@ for (this_visual_ctrl in c(0,1)){
   }
 }
 
-trajectories_median_tibble <- trajectories_median_trial %>%
-  bind_rows() 
-
-
-# Figure 5a
+## Figure 5a  (exp1)----
 path_by_gain_exp1 <- ggplot(data = filter(trajectories_position, visual_ctrl == 0)) +
   geom_point(mapping = aes(x = target_pos_x, y = target_pos_y, color = target_fct), size = 1) +
   geom_path(mapping = aes(x = thimble_pos_x, y = thimble_pos_y, group = trial_index), linewidth = 0.2, color = "grey") + 
@@ -182,7 +169,7 @@ path_by_gain_exp1 <- ggplot(data = filter(trajectories_position, visual_ctrl == 
   scale_y_continuous(breaks=c(0, 25, 50, 75))+
   theme(text = element_text(size = 10), plot.title = element_text(hjust = 0.5), legend.position = "none")
 
-# Figure 8a
+## Figure 8a (exp2) ------
 path_by_gain_exp2 <- ggplot(data = filter(trajectories_position, visual_ctrl == 1)) +
   geom_point(mapping = aes(x = target_pos_x, y = target_pos_y, color = target_fct), size = 1) +
   geom_path(mapping = aes(x = thimble_pos_x, y = thimble_pos_y, group = trial_index), linewidth = 0.2, color = "grey") + 

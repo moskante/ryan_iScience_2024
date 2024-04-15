@@ -1,6 +1,8 @@
 source("scripts/preprocessing_exp3.R", echo=FALSE)
-## Scatterplot speed, position (Fig. 10 A, B) ------ 
 
+# Scatterplots  ------ 
+
+## Speed Fig. 10 a ----
 plot_lmm_speed <- ggplot(filter(final_position_zscore_summary, id == "prba"), aes(gain, mean_speed_zscore)) + 
   geom_point() +
   geom_errorbar(aes(ymin = mean_speed_zscore - sd_speed_zscore,
@@ -12,6 +14,7 @@ plot_lmm_speed <- ggplot(filter(final_position_zscore_summary, id == "prba"), ae
   theme(panel.grid.minor = element_blank(), text = element_text(size = 10))+
   xlab("Gain") + ylab("Thimble Absolute Speed [z-score]")
 
+## Position Fig. 10 b ----
 plot_lmm_pos <- ggplot(filter(final_position_zscore_summary, id == "prba"), aes(gain, mean_pos_zscore)) +
   geom_point() +
   geom_errorbar(aes(ymin = mean_pos_zscore - sd_pos_zscore,
@@ -23,9 +26,9 @@ plot_lmm_pos <- ggplot(filter(final_position_zscore_summary, id == "prba"), aes(
   theme(panel.grid.minor = element_blank(), text = element_text(size = 10)) +
   xlab("Gain") + ylab("Thimble Absolute Position [z-score]")
 
-## Models ------
+# Models ------
 
-### Speed ----
+## Speed ----
 lmm_speed_fit_by_target    <- map2(.x = c("x", "y"),
                                    .y = c(0,0), # do not filter data by target
                                    .f = lmer_condition,
@@ -34,7 +37,7 @@ lmm_speed_fit_by_target    <- map2(.x = c("x", "y"),
 names_lmm_abs_speed_by_target <- names(lmm_speed_fit_by_target) <- c("x", "y")
 lmm_speed_summary_by_target <- map(lmm_speed_fit_by_target, .f = summary)
 
-### Position ----
+## Position ----
 lmm_pos_fit_by_target    <- map2(.x =  c("x", "y"),
                                 .y = c(0,0), # do not filter data by target
                                 .f = lmer_condition,

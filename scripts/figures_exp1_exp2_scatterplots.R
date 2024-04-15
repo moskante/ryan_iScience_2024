@@ -1,6 +1,6 @@
 source("scripts/preprocessing_exp1_exp2.R", echo = FALSE)
 
-## Scatterplot - velocity (Fig. 4c) -------------------------------
+# Scatterplot - velocity (Fig. 4c) -------------------------------
 # this prepares data for the scatterplot in figure 4c of manuscript
 
 id_for_scatterplot <- "20210111cory"
@@ -51,12 +51,10 @@ summary_participant_position <- final_position_zscore %>%
     target_fct = factor(target, ordered = TRUE, levels = c("45", "0", "-45"))
   )%>%
   mutate(
-    # target_fct = recode(target_fct, `-45` = "left", `0` = "center", `45` = "right")
-    # check the frame of reference should be CCW
     target_fct = recode(target_fct, `45` = "left", `0` = "center", `-45` = "right")
   )
 
-# Scatter for position in Exp 1 (Fig. 5b in manuscript)
+## Scatter for position in Exp 1 (Fig. 5b in manuscript) ----
 scatter_final_position_exp1 <-
   ggplot(data = dplyr::filter(summary_participant_position, id =="20210111cory"),
          mapping = aes(x = gain, y = thimble_pos_mean_zscore)) +
@@ -69,7 +67,7 @@ scatter_final_position_exp1 <-
   scale_x_continuous(breaks = c(-0.7,0,0.7), limits = c(-0.8,0.8)) +
   labs(x = "Gain", y = "Thimble Position [z-score]")
 
-# Scatter for position in Exp 2 (Fig. 8b in manuscript)
+## Scatter for position in Exp 2 (Fig. 8b in manuscript) ----
 scatter_final_position_exp2 <-
   ggplot(data = dplyr::filter(summary_participant_position, id =="20210224gica"),
          mapping = aes(x = gain, y = thimble_pos_mean_zscore)) +

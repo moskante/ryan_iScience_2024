@@ -25,7 +25,7 @@ for(i in axis){
     ggplot(final_position_summary[[i]]) +
     geom_bar( aes(x= gain_fct, y=mean_shear, fill = gain_fct), stat="identity") +
     geom_errorbar( aes(x=gain_fct, ymin=mean_shear-sd_shear, ymax=mean_shear+sd_shear),
-                   width=0.4, alpha=0.9, size= 0.4) +
+                   width=0.4, alpha=0.9, linewidth= 0.4) +
     facet_wrap( ~ condition, labeller = labeller(condition =dose.labs)) +
     labs(x = "Gain", y = "Force [N]") +
     theme(legend.position = "none")
@@ -43,3 +43,4 @@ for(i in axis){
 }
 names(lmm_shear_force) <- c("x", "y")
 lmm_shear_force_summary <- map(lmm_shear_force, .f = summary)
+

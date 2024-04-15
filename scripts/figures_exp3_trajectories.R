@@ -1,5 +1,4 @@
 library(tidyverse)
-
 load("trajectories_exp3.RData")
 load("final_position_exp3.RData")
 
@@ -83,6 +82,7 @@ for (this_condition in conditions){
     }
   }
   
+  # Figure 
   figure_panel[[this_condition]] <- ggplot(data = trajectories_id[trajectories_id$condition == this_condition,] ) +
     geom_point(mapping = aes(x = target_pos_x, y = target_pos_y, color = target_fct), size = 1) +
     geom_path(mapping = aes(x = thimble_pos_x, y = thimble_pos_y, group = trial_index), linewidth = 0.2, color = "grey") +

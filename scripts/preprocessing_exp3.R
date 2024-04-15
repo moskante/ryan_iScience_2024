@@ -1,5 +1,6 @@
 library(lme4)
 library(lmerTest)
+library(tidyverse)
 
 load("final_position_exp3.RData")
 source("scripts/preprocessing_custom_functions_exp3.R", echo=FALSE)

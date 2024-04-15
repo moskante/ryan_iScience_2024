@@ -26,3 +26,4 @@ lmer_condition <- function(arg_axis, arg_target, arg_formula, arg_data, plot = F
   
   return(lmm_fit)
 }
+
