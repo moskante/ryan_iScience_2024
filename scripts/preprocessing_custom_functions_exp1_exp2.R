@@ -84,3 +84,10 @@ barplot_lmm_vel_pos <- function(lmm_fit, model_name, velocity = TRUE ){
   
   return(barplot_slope)
 }
+
+# plot histogram of random effects
+hist_ranef <- function(model){
+  rfx = data.frame(ranef(model))
+  plot <- ggplot(rfx, aes(condval)) + geom_histogram(bins = 20)
+  return(plot)
+}

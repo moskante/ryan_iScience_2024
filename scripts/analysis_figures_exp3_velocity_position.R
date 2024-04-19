@@ -37,6 +37,10 @@ lmm_speed_fit_by_target    <- map2(.x = c("x", "y"),
 names_lmm_abs_speed_by_target <- names(lmm_speed_fit_by_target) <- c("x", "y")
 lmm_speed_summary_by_target <- map(lmm_speed_fit_by_target, .f = summary)
 
+# Check residuals 
+lmm_speed_plot_by_target <- map(lmm_speed_fit_by_target, .f = plot)
+lmm_speed_hist_by_target <- map(lmm_speed_fit_by_target, .f = hist_ranef)
+
 ## Position ----
 lmm_pos_fit_by_target    <- map2(.x =  c("x", "y"),
                                 .y = c(0,0), # do not filter data by target
@@ -47,3 +51,6 @@ lmm_pos_fit_by_target    <- map2(.x =  c("x", "y"),
 names_lmm_pos_fit_by_target <- names(lmm_pos_fit_by_target) <- c("x", "y")
 lmm_pos_summary_by_target <- map(lmm_pos_fit_by_target, .f = summary)
 
+# Check residuals 
+lmm_pos_plot_by_target <- map(lmm_pos_fit_by_target, .f = plot)
+lmm_pos_hist_by_target <- map(lmm_pos_fit_by_target, .f = hist_ranef)

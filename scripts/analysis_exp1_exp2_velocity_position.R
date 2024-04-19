@@ -17,6 +17,11 @@ lmm_velocity_fit <- map2(.x = lmm_stimulus_matrix[["axis"]],
 names(lmm_velocity_fit) <- c("exp1_x", "exp1_y", "exp2_x", "exp2_y")
 lmm_velocity_summary <- map(lmm_velocity_fit, .f = summary, .id = names(lmm_velocity_fit))
 
+# Check residuals 
+lmm_velocity_plot <- map(lmm_velocity_fit, .f = plot)
+lmm_velocity_hist <- map(lmm_velocity_fit, .f = hist_ranef)
+
+
 # Models: Final Position ---------------------------------------------------------------
 
 lmm_pos_fit <- map2(.x = lmm_stimulus_matrix[["axis"]],
@@ -27,4 +32,8 @@ lmm_pos_fit <- map2(.x = lmm_stimulus_matrix[["axis"]],
 
 names(lmm_pos_fit) <- c("exp1_x", "exp1_y", "exp2_x", "exp2_y")
 lmm_pos_summary <- map(lmm_pos_fit, .f = summary, .id = names(lmm_pos_fit))
+
+# Check residuals 
+lmm_pos_plot <- map(lmm_pos_fit, .f = plot)
+lmm_pos_hist <- map(lmm_pos_fit, .f = hist_ranef)
 

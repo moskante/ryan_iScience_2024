@@ -27,3 +27,9 @@ lmer_condition <- function(arg_axis, arg_target, arg_formula, arg_data, plot = F
   return(lmm_fit)
 }
 
+# plot histogram of random effects
+hist_ranef <- function(model){
+  rfx = data.frame(ranef(model))
+  plot <- ggplot(rfx, aes(condval)) + geom_histogram(bins = 20)
+  return(plot)
+}
