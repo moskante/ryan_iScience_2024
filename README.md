@@ -21,6 +21,8 @@ This project is licensed under the GUN General Public License. See [LICENSE](LIC
 
 This code is associate to a scientific publication. See [CITATION](CITATION).
 
+DOI: [![DOI](https://zenodo.org/badge/784177946.svg)](https://zenodo.org/doi/10.5281/zenodo.11046295)
+
 ## Data
 
 Data available on Zenodo
